@@ -37,7 +37,7 @@ def is_ambig(base):
     for acid in AMINO_ACIDS:
         for code in acid['bases']:
             if code[2] == 'X':
-                if base[0:2] == code[0:2]:
+                if base[0] == code[0] and base[1] == code[1]:
                     return True
     return False
 
