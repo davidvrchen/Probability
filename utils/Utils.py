@@ -21,6 +21,8 @@ AMINO_ACIDS = [
     {'code': "Y", 'bases': ["TAT", "TAC"], 'p': 0.0311},
 ]
 
+NUCLEOTIDES = ["A", "G", "C", "U"]
+
 # Gets the acid from the bases
 def get_acid(base):
     for acid in AMINO_ACIDS:

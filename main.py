@@ -1,5 +1,6 @@
-import utils.RNAsampler as sampler
-import utils.AminoAcids as acids
+from analyzing.FirstAnalyzer import FirstAnalyzer
+from perturbing.PerturberStrategy import PerturberType
+from sampling.SamplerStrategy import SamplerType
 
 # # TESTING
 # print(sampler.random_nucleotide())
@@ -12,5 +13,7 @@ import utils.AminoAcids as acids
 # print(seq)
 # print(sampler.perturb_sequence(seq))
 
-print(sampler.analyze_failure())
-print(sampler.analyze_failure2())
+#print(sampler.analyze_failure())
+#print(sampler.analyze_failure2())
+
+analyzer = FirstAnalyzer(SamplerType.UniformSampler, PerturberType.BinaryPerturber)
