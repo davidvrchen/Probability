@@ -11,4 +11,6 @@ import utils.AminoAcids as acids
 # seq = sampler.random_sequence()
 # print(seq)
 # print(sampler.perturb_sequence(seq))
+
 print(sampler.analyze_failure())
+print(sampler.analyze_failure2())
