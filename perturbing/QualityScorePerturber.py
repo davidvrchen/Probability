@@ -1,6 +1,6 @@
 from perturbing.Perturber import Perturber
 import random
-import utils
+from utils import Utils as utils
 import math
 
 class QualityScorePerturber(Perturber):

@@ -1,13 +1,13 @@
 from sampling.Sampler import Sampler
 import random
-import utils
+from utils import Utils as utils
 
 class AcidSampler(Sampler):
 
     def random_sequence(self):
         sequence = []
-        for i in range(self.sequence_length / 3):
-            sequence += self.__translate_acid(self.__random_acid())
+        for i in range(self.sequence_length // 3):
+            sequence += list(self.__translate_acid(self.__random_acid()))
         return sequence
     
     def __translate_acid(self, acid):
