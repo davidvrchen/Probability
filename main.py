@@ -19,6 +19,6 @@ import utils.Utils as utils
 #print(sampler.analyze_failure2())
 
 analyzer1 = FirstAnalyzer(SamplerType.UNIFORM_SAMPLING, PerturberType.BINARY_PERTURBING)
-analyzer2 = SecondAnalyzer(SamplerType.ACID_SAMPLING, PerturberType.QUALITY_SCORE_PERTURBING, sample_size=100)
+analyzer2 = SecondAnalyzer(SamplerType.ACID_SAMPLING, PerturberType.QUALITY_SCORE_PERTURBING, sample_size=1000)
 analyzer1.print_analyze()
 analyzer2.print_analyze()
