@@ -1,5 +1,6 @@
 from analyzing.FirstAnalyzer import FirstAnalyzer
 from analyzing.SecondAnalyzer import SecondAnalyzer
+from analyzing.ThirdAnalyzer import ThirdAnalyzer
 from perturbing.PerturberStrategy import PerturberType
 from sampling.SamplerStrategy import SamplerType
 import utils.Utils as utils
@@ -18,7 +19,9 @@ import utils.Utils as utils
 #print(sampler.analyze_failure())
 #print(sampler.analyze_failure2())
 
-analyzer1 = FirstAnalyzer(SamplerType.UNIFORM_SAMPLING, PerturberType.BINARY_PERTURBING)
-analyzer2 = SecondAnalyzer(SamplerType.ACID_SAMPLING, PerturberType.QUALITY_SCORE_PERTURBING, sample_size=100)
-analyzer1.print_analyze()
+# analyzer1 = FirstAnalyzer(SamplerType.UNIFORM_SAMPLING, PerturberType.BINARY_PERTURBING)
+# analyzer1.print_analyze()
+analyzer2 = SecondAnalyzer(SamplerType.ACID_SAMPLING, PerturberType.QUALITY_SCORE_PERTURBING, sample_size = 1000)
 analyzer2.print_analyze()
+# analyzer3 = ThirdAnalyzer(SamplerType.ACID_SAMPLING, PerturberType.DISTRIBUTED_QUALITY_SCORE, sample_size = 1000)
+# analyzer3.print_analyze()
