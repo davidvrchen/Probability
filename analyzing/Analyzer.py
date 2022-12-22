@@ -5,6 +5,7 @@ import perturbing.PerturberStrategy as perturb
 class Analyzer(ABC):
 
     FAILURE_PROBABILITY = 0.01
+    ERROR_GOAL = 0.01
 
     def __init__(self, sampler_strategy, perturber_strategy, sample_size):
         self.SAMPLE_SIZE = sample_size
