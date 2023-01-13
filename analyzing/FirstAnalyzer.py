@@ -3,8 +3,8 @@ from utils import Utils as utils
 
 class FirstAnalyzer(Analyzer):
     
-    def __init__(self, sampler_strategy, perturber_strategy, sample_size=10000):
-        super().__init__(sampler_strategy, perturber_strategy, sample_size)
+    def __init__(self, sampler_strategy, perturber_strategy, sample_size=10000, fail_probability = 0.001):
+        super().__init__(sampler_strategy, perturber_strategy, sample_size, fail_probability)
 
     def print_analyze(self):
         print("Analyzing using FirstAnalyzer")

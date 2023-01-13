@@ -5,8 +5,8 @@ import copy
 
 class SecondAnalyzer(Analyzer):
 
-    def __init__(self, sampler_strategy, perturber_strategy, sample_size=10000, bounds = [25, 30]):
-        super().__init__(sampler_strategy, perturber_strategy, sample_size)
+    def __init__(self, sampler_strategy, perturber_strategy, sample_size=10000, fail_probability = 0.001, bounds = [25, 30]):
+        super().__init__(sampler_strategy, perturber_strategy, sample_size, fail_probability)
         self.BOUNDS = bounds
 
     def print_analyze(self):
@@ -16,11 +16,13 @@ class SecondAnalyzer(Analyzer):
         print("Total actual error percentage: ", analysis[1]) # actual_error_percentage
         print("Potential error percentage after repairs: ", analysis[2]) #rep_perc
         print("Percentage of potential errors that were repaired or correct: ", analysis[3]) #rep_perc2
+        print("Actual error percentage after repairs: ", analysis[4]) #actual_rep_perc
+        print("Percentage of actual errors that were repaired or correct: ", analysis[5]) #actual_rep_perc2
 
-        print("Percentage of actual errors that were unrepairable and have Q score >= 25: ", analysis[4])
-        print("Percentage of correct readings with ", self.BOUNDS[0], " <= Q score < ", self.BOUNDS[1], ": ", analysis[5])
-        print("Percentage of incorrect uncertainties: ", analysis[6])
-        print("Percentage of readings fixed by guessing: ", analysis[7])
+        print("Percentage of actual errors that were unrepairable and have Q score >=", self.BOUNDS[0], " : ", analysis[6])
+        print("Percentage of correct readings with ", self.BOUNDS[0], " <= Q score < ", self.BOUNDS[1], ": ", analysis[7])
+        print("Percentage of incorrect uncertainties: ", analysis[8])
+        print("Percentage of readings fixed by guessing: ", analysis[9])
         print('\n')
 
     def analyze(self):
@@ -75,7 +77,9 @@ class SecondAnalyzer(Analyzer):
         potential_error_perc = (potential_errors / total) * 100
         actual_error_perc = (actual_errors / total) * 100 
         rep_perc = ((potential_errors - total_repairable) / total) * 100 
+        actual_rep_perc = ((actual_errors - actual_errors_repairable) / total) * 100
         rep_perc2 = ((total_repairable + correct_uncertainties) / potential_errors) * 100 
+        actual_rep_perc2 = ((actual_errors_repairable) / actual_errors) * 100 
 
         unrepairable_uncertain_perc = ((uncertain_unchanged - correct_uncertainties) / actual_errors) * 100 
         
@@ -98,4 +102,4 @@ class SecondAnalyzer(Analyzer):
             correct_guess_perc = ((uncertain_changed - (uncertain_changed - guessed_uncertainties)) / uncertain_changed) * 100 
            
 
-        return [potential_error_perc, actual_error_perc, rep_perc, rep_perc2, unrepairable_uncertain_perc, high_q_score_correct_perc, unfixed_potential_errors, correct_guess_perc]
+        return [potential_error_perc, actual_error_perc, rep_perc, rep_perc2, actual_rep_perc, actual_rep_perc2, unrepairable_uncertain_perc, high_q_score_correct_perc, unfixed_potential_errors, correct_guess_perc]
