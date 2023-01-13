@@ -7,6 +7,9 @@ import copy
 # Perturbs with a predefined error rate and generates a Q score dependent on a pass or fail.
 class QualityScorePerturber(Perturber):
 
+    def __init__(self, fail_probability):
+        super().__init__(fail_probability)
+
     def perturb_sequence(self, sequence, bounds):
         errors = []
         pert_seq = copy.deepcopy(sequence)

@@ -6,6 +6,9 @@ import copy
 # Perturbs a sequence with a predefined error rate an assigns 'W' or 'R' to indicate whether it is perturbed or not.
 class BinaryPerturber(Perturber):
 
+    def __init__(self, fail_probability):
+        super().__init__(fail_probability)
+
     def perturb_sequence(self, sequence):
         errors = []
         pert_seq = copy.deepcopy(sequence)

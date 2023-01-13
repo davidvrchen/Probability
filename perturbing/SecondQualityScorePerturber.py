@@ -7,6 +7,9 @@ import copy
 # Takes uniformly distributed Q scores and perturbs with an error rate based on the Q score.
 class SecondQualityScorePerturber(Perturber):
 
+    def __init__(self, fail_probability):
+        super().__init__(fail_probability)
+
     def perturb_sequence(self, sequence):
         errors = []
         pert_seq = copy.deepcopy(sequence)
