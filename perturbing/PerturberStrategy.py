@@ -8,10 +8,10 @@ class PerturberType(Enum):
     QUALITY_SCORE_PERTURBING = 1
     DISTRIBUTED_QUALITY_SCORE = 2
 
-def create_perturber(type):
+def create_perturber(type, fail_probability):
     if type == PerturberType.BINARY_PERTURBING:
-        return BinaryPerturber()
+        return BinaryPerturber(fail_probability)
     elif type == PerturberType.QUALITY_SCORE_PERTURBING:
-        return QualityScorePerturber()
+        return QualityScorePerturber(fail_probability)
     elif type == PerturberType.DISTRIBUTED_QUALITY_SCORE:
-        return SecondQualityScorePerturber()
+        return SecondQualityScorePerturber(fail_probability)

@@ -6,7 +6,7 @@ import copy
 
 class SecondAnalyzer(Analyzer):
 
-    def __init__(self, sampler_strategy, perturber_strategy, sample_size=10000, fail_probability = 0.001, bounds = [25, 30]):
+    def __init__(self, sampler_strategy, perturber_strategy, sample_size=10000, fail_probability = 0.01, bounds = [25, 30]):
         super().__init__(sampler_strategy, perturber_strategy, sample_size, fail_probability)
         self.BOUNDS = bounds
 
@@ -44,10 +44,10 @@ class SecondAnalyzer(Analyzer):
         guessed_uncertainties = 0
         unfixed_errors = 0
 
-        potential_deviations = [0] * self.SAMPLE_SIZE
-        potential_repairable_deviations = [0] * self.SAMPLE_SIZE
-        actual_deviations = [0] * self.SAMPLE_SIZE
-        actual_repairable_deviations = [0] * self.SAMPLE_SIZE
+        potential_deviations = [0 for i in range(self.SAMPLE_SIZE)]
+        potential_repairable_deviations = [0 for i in range(self.SAMPLE_SIZE)]
+        actual_deviations = [0 for i in range(self.SAMPLE_SIZE)]
+        actual_repairable_deviations = [0 for i in range(self.SAMPLE_SIZE)]
 
         for j in range(self.SAMPLE_SIZE):
             seq = self.sampler.random_sequence()
@@ -93,10 +93,10 @@ class SecondAnalyzer(Analyzer):
                             unfixed_errors += 1
 
             potential_deviations[j] = (potential_errors - old_potential_errors) / (total - old_total) * 100
-            potential_repairable_deviations[j] = total_repairable + correct_uncertainties - old_total_repairable - old_correct_uncertainties
-            potential_repairable_deviations[j] /= (total - old_total) * 100
+            potential_repairable_deviations[j] = potential_errors - old_potential_errors - (total_repairable + correct_uncertainties - old_total_repairable - old_correct_uncertainties)
+            potential_repairable_deviations[j] = potential_repairable_deviations[j] / (total - old_total) * 100
             actual_deviations[j] = (actual_errors - old_actual_errors) / (total - old_total) * 100
-            actual_repairable_deviations[j] = (actual_errors_repairable - old_actual_repairable) / (total - old_total) * 100
+            actual_repairable_deviations[j] = (actual_errors - old_actual_errors - (actual_errors_repairable - old_actual_repairable)) / (total - old_total) * 100
 
         potential_error_perc = (potential_errors / total) * 100
         actual_error_perc = (actual_errors / total) * 100 
@@ -104,8 +104,7 @@ class SecondAnalyzer(Analyzer):
         actual_rep_perc = ((actual_errors - actual_errors_repairable) / total) * 100
         rep_perc2 = ((total_repairable + correct_uncertainties) / potential_errors) * 100 
         actual_rep_perc2 = ((actual_errors_repairable) / actual_errors) * 100 
-        print("actual_errors: ", actual_errors)
-        print("actual_errors_repairable: ", actual_errors_repairable)
+        
         # calculate sample standard deviation as we clearly only have a sample
         potential_standard_deviation = 0
         potential_standard_deviation_repairable = 0
