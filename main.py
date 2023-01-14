@@ -1,11 +1,13 @@
 import math
 import pprint
+
 from analyzing.FirstAnalyzer import FirstAnalyzer
 from analyzing.SecondAnalyzer import SecondAnalyzer
 from analyzing.ThirdAnalyzer import ThirdAnalyzer
 from perturbing.PerturberStrategy import PerturberType
 from sampling.SamplerStrategy import SamplerType
 import utils.Utils as utils
+import matplotlib as mplt
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -49,29 +51,36 @@ for i in range(41):
 print("analyzer 3 started")
 prob_standard_dev3 = np.zeros((2, 2, 41))
 for i in range(41):
-    analyzer3 = ThirdAnalyzer(SamplerType.ACID_SAMPLING, PerturberType.DISTRIBUTED_QUALITY_SCORE, sample_size = 1000, fail_probability = math.pow(10,  -i / 10))
+    analyzer3 = ThirdAnalyzer(SamplerType.ACID_SAMPLING, PerturberType.DISTRIBUTED_QUALITY_SCORE, sample_size = 1000, goal = math.pow(10,  -i / 10))
     results_analyzer3 = analyzer3.analyze()
-    prob_standard_dev3[0][0][i] = results_analyzer3[0]
-    prob_standard_dev3[0][1][i] = results_analyzer3[3]
-    prob_standard_dev3[1][0][i] = results_analyzer3[1]
-    prob_standard_dev3[1][1][i] = results_analyzer3[4]
+    prob_standard_dev3[0][0][i] = results_analyzer3[5]
+    prob_standard_dev3[0][1][i] = results_analyzer3[7]
+    prob_standard_dev3[1][0][i] = results_analyzer3[6]
+    prob_standard_dev3[1][1][i] = results_analyzer3[8]
     print("analyzer 3 has results up to ", i)
 
 fig, axs = plt.subplots(3, sharex=True)
-fig.suptitle("Percentage of errors in the result as a function of the \n probability that a nucleotide in the sequence is perturbed.")
-axs[0].set_title("The probability e that a nucleotide in the sequence is perturbed by the machine defined as -10log_10(e).")
 
 axs[0].plot(x_axis, prob_standard_dev1[1][0], 'red', x_axis, prob_standard_dev1[0][0] + prob_standard_dev1[0][1], 'blue', x_axis, prob_standard_dev1[0][0] - prob_standard_dev1[0][1], 'blue',
 x_axis, prob_standard_dev1[1][0], 'purple', x_axis, prob_standard_dev1[1][0] + prob_standard_dev1[1][1], 'green', x_axis, prob_standard_dev1[1][0] - prob_standard_dev1[1][1], 'green')
-axs[0].set(ylabel = "Binary analyzer")
 
 axs[1].plot(x_axis, prob_standard_dev2[0][0], 'red', x_axis, prob_standard_dev2[0][0] + prob_standard_dev2[0][1], 'blue', x_axis, prob_standard_dev2[0][0] - prob_standard_dev2[0][1], 'blue',
     x_axis, prob_standard_dev2[1][0], 'purple', x_axis, prob_standard_dev2[1][0] + prob_standard_dev2[1][1], 'green', x_axis, prob_standard_dev2[1][0] - prob_standard_dev2[1][1], 'green')
-axs[1].set(ylabel = "Q score analyzer")
 
 axs[2].plot(x_axis, prob_standard_dev3[0][0], 'red', x_axis, prob_standard_dev3[0][0] + prob_standard_dev3[0][1], 'blue', x_axis, prob_standard_dev3[0][0] - prob_standard_dev3[0][1], 'blue',
     x_axis, prob_standard_dev3[1][0], 'purple', x_axis, prob_standard_dev3[1][0] + prob_standard_dev3[1][1], 'green', x_axis, prob_standard_dev3[1][0] - prob_standard_dev3[1][1], 'green')
-axs[2].set(ylabel = "Reversed Q score analyzer")
+
+# Setting labels, comment these out to get plots with no text:
+mplt.rcParams.update({'font.size': 10})
+fig.suptitle("Percentage of errors in the result as a function of the \n probability that a nucleotide in the sequence is perturbed.")
+# axs[0].set(ylabel = "analyzer 1")
+axs[0].set(ylabel = "Binary analyzer")
+# axs[1].set(ylabel = "analyzer 2")
+axs[1].set(ylabel = "Q score analyzer")
+# axs[2].set(ylabel = "analyzer 3")
+axs[2].set(ylabel = "Minimal Q score to reach less errors")
+# Set x axis label for lowest plot
+axs[2].set(xlabel = "The probability e that a nucleotide in the sequence\n  is perturbed by the machine defined as -10log_10(e).")
 
 # Uncomment to make x axis not shared
 for ax in axs:
