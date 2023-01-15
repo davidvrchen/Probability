@@ -48,14 +48,14 @@ class FirstAnalyzer(Analyzer):
         rep_perc = ((total_errors - total_repairable) / total) * 100
         rep_perc2 = (total_repairable / total_errors) * 100
 
-        # calculate sample standard deviation as we clearly only have a sample
+        # calculate standard deviation
         standard_deviation = 0
         standard_deviation_repairable = 0
         for k in range(self.SAMPLE_SIZE):
             standard_deviation += math.pow(deviations[k] - error_perc, 2)
             standard_deviation_repairable += math.pow(repairable_deviations[k] - rep_perc, 2)
 
-        standard_deviation = math.pow(standard_deviation / (self.SAMPLE_SIZE - 1), 1/2)
-        standard_deviation_repairable = math.pow(standard_deviation_repairable / (self.SAMPLE_SIZE - 1), 1/2)
+        standard_deviation = math.pow(standard_deviation / self.SAMPLE_SIZE, 1/2)
+        standard_deviation_repairable = math.pow(standard_deviation_repairable / self.SAMPLE_SIZE, 1/2)
 
         return [error_perc, rep_perc, rep_perc2, standard_deviation, standard_deviation_repairable]

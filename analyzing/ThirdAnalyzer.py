@@ -106,7 +106,7 @@ class ThirdAnalyzer(Analyzer):
                 if(achieve_goal == 30):
                     geq_30_wrong_perc = q_score_error_count / reading_count 
 
-            # TODO: Implement the deviation calculation
+            
             rep_min_qscores += achieve_goal
 
             no_reps_min_qscore_deviation[j] = no_rep_min_qscores - old_no_rep_min_qscores
@@ -119,7 +119,7 @@ class ThirdAnalyzer(Analyzer):
         no_rep_avg_qscore_error = no_rep_min_qscores / self.SAMPLE_SIZE
         rep_avg_qscore_error = rep_min_qscores / self.SAMPLE_SIZE
 
-        # calculate sample standard deviation as we clearly only have a sample
+        # calculate standard deviation
         standard_deviation = 0
         standard_deviation_repairable = 0
         std_dev_no_rep_qscores = 0
@@ -131,14 +131,14 @@ class ThirdAnalyzer(Analyzer):
             std_dev_no_rep_qscores += math.pow(no_reps_min_qscore_deviation[k] - no_rep_avg_qscore_error, 2)
             std_dev_rep_qscores += math.pow(rep_min_qscore_deviation[k] - rep_avg_qscore_error, 2)
 
-        standard_deviation = math.pow(standard_deviation / (self.SAMPLE_SIZE - 1), 1/2)
-        standard_deviation_repairable = math.pow(standard_deviation_repairable / (self.SAMPLE_SIZE - 1), 1/2)        
+        standard_deviation = math.pow(standard_deviation / self.SAMPLE_SIZE, 1/2)
+        standard_deviation_repairable = math.pow(standard_deviation_repairable / self.SAMPLE_SIZE, 1/2)        
 
-        std_dev_no_rep_qscores = math.pow(std_dev_no_rep_qscores / (self.SAMPLE_SIZE - 1), 1/ 2)
-        std_dev_rep_qscores = math.pow(std_dev_rep_qscores / (self.SAMPLE_SIZE - 1), 1 / 2)
+        std_dev_no_rep_qscores = math.pow(std_dev_no_rep_qscores / self.SAMPLE_SIZE, 1/ 2)
+        std_dev_rep_qscores = math.pow(std_dev_rep_qscores / self.SAMPLE_SIZE, 1 / 2)
 
         # round avg_qscore_errors up to the nearest integer 
-        no_rep_avg_qscore_error = math.ceil(no_rep_avg_qscore_error)
-        rep_avg_qscore_error = math.ceil(rep_avg_qscore_error)
+        # no_rep_avg_qscore_error = math.ceil(no_rep_avg_qscore_error)
+        # rep_avg_qscore_error = math.ceil(rep_avg_qscore_error)
 
         return [error_perc, rep_perc, rep_perc2, standard_deviation, standard_deviation_repairable, no_rep_avg_qscore_error, rep_avg_qscore_error, std_dev_no_rep_qscores, std_dev_rep_qscores]
