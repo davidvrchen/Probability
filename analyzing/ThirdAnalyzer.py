@@ -78,7 +78,7 @@ class ThirdAnalyzer(Analyzer):
             reading_count = q_scores_total[achieve_goal - 1] - old_q_scores_total[achieve_goal - 1]
             rep_q_score_error_count = q_scores_error[achieve_goal - 1] - old_q_scores_error[achieve_goal - 1] - (q_scores_repaired[achieve_goal - 1] - old_q_scores_repaired[achieve_goal - 1])
 
-            if (reading_count == 0):
+            while (reading_count == 0):
                 achieve_goal -= 1
                 q_score_error_count += q_scores_error[achieve_goal - 1] - old_q_scores_error[achieve_goal - 1] # add the values for the next highest Q score
                 reading_count += q_scores_total[achieve_goal - 1] - old_q_scores_total[achieve_goal - 1]
@@ -140,5 +140,5 @@ class ThirdAnalyzer(Analyzer):
         # round avg_qscore_errors up to the nearest integer 
         no_rep_avg_qscore_error = math.ceil(no_rep_avg_qscore_error)
         rep_avg_qscore_error = math.ceil(rep_avg_qscore_error)
-        
+
         return [error_perc, rep_perc, rep_perc2, standard_deviation, standard_deviation_repairable, no_rep_avg_qscore_error, rep_avg_qscore_error, std_dev_no_rep_qscores, std_dev_rep_qscores]

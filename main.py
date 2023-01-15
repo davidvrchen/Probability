@@ -17,8 +17,8 @@ import numpy as np
 # analyzer2 = SecondAnalyzer(SamplerType.ACID_SAMPLING, PerturberType.QUALITY_SCORE_PERTURBING, sample_size = 10000, fail_probability = 0.001, bounds = [25, 30])
 # analyzer2.print_analyze()
 
-analyzer3 = ThirdAnalyzer(SamplerType.ACID_SAMPLING, PerturberType.DISTRIBUTED_QUALITY_SCORE, sample_size = 10000, goal = 0.001)
-analyzer3.print_analyze()
+# analyzer3 = ThirdAnalyzer(SamplerType.ACID_SAMPLING, PerturberType.DISTRIBUTED_QUALITY_SCORE, sample_size = 10000, goal = 0.001)
+# analyzer3.print_analyze()
 
 # Get the error percentages for the total and the repairable errors with theirstandard deviations as pairs 
 
@@ -26,7 +26,7 @@ analyzer3.print_analyze()
 print("analyzer 1 started")
 prob_standard_dev1 = np.zeros((2, 2, 41))
 for i in range(41):
-    analyzer1 = FirstAnalyzer(SamplerType.ACID_SAMPLING, PerturberType.BINARY_PERTURBING, sample_size = 1000, fail_probability = math.pow(10,  -i / 10))
+    analyzer1 = FirstAnalyzer(SamplerType.ACID_SAMPLING, PerturberType.BINARY_PERTURBING, sample_size = 10000, fail_probability = math.pow(10,  -i / 10))
     results_analyzer1 = analyzer1.analyze()
     prob_standard_dev1[0][0][i] = results_analyzer1[0]
     prob_standard_dev1[0][1][i] = results_analyzer1[3]
@@ -40,7 +40,7 @@ x_axis = [i for i in range(41)]
 print("analyzer 2 started")
 prob_standard_dev2 = np.zeros((2, 2, 41))
 for i in range(41):
-    analyzer2 = SecondAnalyzer(SamplerType.ACID_SAMPLING, PerturberType.QUALITY_SCORE_PERTURBING, sample_size=1000, fail_probability = math.pow(10,  -i / 10), bounds = [25, 30])
+    analyzer2 = SecondAnalyzer(SamplerType.ACID_SAMPLING, PerturberType.QUALITY_SCORE_PERTURBING, sample_size=10000, fail_probability = math.pow(10,  -i / 10), bounds = [25, 30])
     results_analyzer2 = analyzer2.analyze()
     prob_standard_dev2[0][0][i] = results_analyzer2[0]
     prob_standard_dev2[0][1][i] = results_analyzer2[6]
@@ -51,7 +51,7 @@ for i in range(41):
 print("analyzer 3 started")
 prob_standard_dev3 = np.zeros((2, 2, 41))
 for i in range(41):
-    analyzer3 = ThirdAnalyzer(SamplerType.ACID_SAMPLING, PerturberType.DISTRIBUTED_QUALITY_SCORE, sample_size = 1000, goal = math.pow(10,  -i / 10))
+    analyzer3 = ThirdAnalyzer(SamplerType.ACID_SAMPLING, PerturberType.DISTRIBUTED_QUALITY_SCORE, sample_size = 10000, goal = math.pow(10,  -i / 10))
     results_analyzer3 = analyzer3.analyze()
     prob_standard_dev3[0][0][i] = results_analyzer3[5]
     prob_standard_dev3[0][1][i] = results_analyzer3[7]
@@ -73,12 +73,12 @@ axs[2].plot(x_axis, prob_standard_dev3[0][0], 'red', x_axis, prob_standard_dev3[
 # Setting labels, comment these out to get plots with no text:
 mplt.rcParams.update({'font.size': 10})
 fig.suptitle("Percentage of errors in the result as a function of the \n probability that a nucleotide in the sequence is perturbed.")
-# axs[0].set(ylabel = "analyzer 1")
-axs[0].set(ylabel = "Binary analyzer")
-# axs[1].set(ylabel = "analyzer 2")
-axs[1].set(ylabel = "Q score analyzer")
-# axs[2].set(ylabel = "analyzer 3")
-axs[2].set(ylabel = "Minimal Q score to reach less errors")
+axs[0].set(ylabel = "analyzer 1")
+# axs[0].set(ylabel = "Binary analyzer")
+axs[1].set(ylabel = "analyzer 2")
+# axs[1].set(ylabel = "Q score analyzer")
+axs[2].set(ylabel = "analyzer 3")
+# axs[2].set(ylabel = "Minimal Q score to reach less errors")
 # Set x axis label for lowest plot
 axs[2].set(xlabel = "The probability e that a nucleotide in the sequence\n  is perturbed by the machine defined as -10log_10(e).")
 
