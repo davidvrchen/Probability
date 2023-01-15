@@ -61,26 +61,53 @@ for i in range(41):
 
 fig, axs = plt.subplots(3, sharex=True)
 
-axs[0].plot(x_axis, prob_standard_dev1[1][0], 'red', x_axis, prob_standard_dev1[0][0] + prob_standard_dev1[0][1], 'blue', x_axis, prob_standard_dev1[0][0] - prob_standard_dev1[0][1], 'blue',
-x_axis, prob_standard_dev1[1][0], 'purple', x_axis, prob_standard_dev1[1][0] + prob_standard_dev1[1][1], 'green', x_axis, prob_standard_dev1[1][0] - prob_standard_dev1[1][1], 'green')
+# plot results analyzer 1 in first plot together with the standard deviation
+# normal error percentage:
+axs[0].plot(x_axis, prob_standard_dev1[1][0], 'red')
+axs[0].plot(x_axis, prob_standard_dev1[0][0] + prob_standard_dev1[0][1], 'blue')
+axs[0].plot(x_axis, prob_standard_dev1[0][0] - prob_standard_dev1[0][1], 'blue')
+# error percentage after repairs:
+axs[0].plot(x_axis, prob_standard_dev1[1][0], 'purple', linestyle = 'dashed')
+axs[0].plot(x_axis, prob_standard_dev1[1][0] + prob_standard_dev1[1][1], 'green', linestyle = 'dashed')
+axs[0].plot(x_axis, prob_standard_dev1[1][0] - prob_standard_dev1[1][1], 'green', linestyle = 'dashed')
 
-axs[1].plot(x_axis, prob_standard_dev2[0][0], 'red', x_axis, prob_standard_dev2[0][0] + prob_standard_dev2[0][1], 'blue', x_axis, prob_standard_dev2[0][0] - prob_standard_dev2[0][1], 'blue',
-    x_axis, prob_standard_dev2[1][0], 'purple', x_axis, prob_standard_dev2[1][0] + prob_standard_dev2[1][1], 'green', x_axis, prob_standard_dev2[1][0] - prob_standard_dev2[1][1], 'green')
+# plot results analyzer 2 in second plot together with the standard deviation
+# normal error percentage:
+axs[1].plot(x_axis, prob_standard_dev2[0][0], 'red')
+axs[1].plot(x_axis, prob_standard_dev2[0][0] + prob_standard_dev2[0][1], 'blue')
+axs[1].plot(x_axis, prob_standard_dev2[0][0] - prob_standard_dev2[0][1], 'blue')
+# error percentage after repairs:
+axs[1].plot(x_axis, prob_standard_dev2[1][0], 'purple', linestyle = 'dashed')
+axs[1].plot(x_axis, prob_standard_dev2[1][0] + prob_standard_dev2[1][1], 'green', linestyle = 'dashed')
+axs[1].plot(x_axis, prob_standard_dev2[1][0] - prob_standard_dev2[1][1], 'green', linestyle = 'dashed')
 
-axs[2].plot(x_axis, prob_standard_dev3[0][0], 'red', x_axis, prob_standard_dev3[0][0] + prob_standard_dev3[0][1], 'blue', x_axis, prob_standard_dev3[0][0] - prob_standard_dev3[0][1], 'blue',
-    x_axis, prob_standard_dev3[1][0], 'purple', x_axis, prob_standard_dev3[1][0] + prob_standard_dev3[1][1], 'green', x_axis, prob_standard_dev3[1][0] - prob_standard_dev3[1][1], 'green')
+# plot results analyzer 3 in second plot together with the standard deviation
+# minimal q score needed normally:
+axs[2].plot(x_axis, prob_standard_dev3[0][0], 'red')
+axs[2].plot(x_axis, prob_standard_dev3[0][0] + prob_standard_dev3[0][1], 'blue')
+axs[2].plot(x_axis, prob_standard_dev3[0][0] - prob_standard_dev3[0][1], 'blue')
+# minimal q score needed after repairs:
+axs[2].plot(x_axis, prob_standard_dev3[1][0], 'purple', linestyle = 'dashed')
+axs[2].plot(x_axis, prob_standard_dev3[1][0] + prob_standard_dev3[1][1], 'green', linestyle = 'dashed')
+axs[2].plot(x_axis, prob_standard_dev3[1][0] - prob_standard_dev3[1][1], 'green', linestyle = 'dashed')
 
 # Setting labels, comment these out to get plots with no text:
 mplt.rcParams.update({'font.size': 10})
 fig.suptitle("Percentage of errors in the result as a function of the \n probability that a nucleotide in the sequence is perturbed.")
-axs[0].set(ylabel = "analyzer 1")
-# axs[0].set(ylabel = "Binary analyzer")
-axs[1].set(ylabel = "analyzer 2")
-# axs[1].set(ylabel = "Q score analyzer")
-axs[2].set(ylabel = "analyzer 3")
-# axs[2].set(ylabel = "Minimal Q score to reach less errors")
+axs[0].set(ylabel = "error percentage")
+axs[0].set_title("analyzer 1")
+# axs[0].set_title("Binary analyzer")
+
+axs[1].set(ylabel = "error percentage")
+axs[1].set_title("analyzer 2")
+# axs[1].set_title("Q score analyzer")
+
+axs[2].set(ylabel = "minimal Q score")
+axs[2].set_title("analyzer 3")
+# axs[2].set_title("Reverse Q score analyzer")
+
 # Set x axis label for lowest plot
-axs[2].set(xlabel = "The probability e that a nucleotide in the sequence\n  is perturbed by the machine defined as -10log_10(e).")
+axs[2].set(xlabel = "Q score for error")
 
 # Uncomment to make x axis not shared
 for ax in axs:

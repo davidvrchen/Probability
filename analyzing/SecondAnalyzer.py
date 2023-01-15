@@ -75,7 +75,6 @@ class SecondAnalyzer(Analyzer):
                     elif (ord(pert[1][i]) >=  self.BOUNDS[0] + 33): # q_score_nr >= lower bound, so it might be correct
                         uncertain_unchanged += 1 
                         # need to change to fix acids not nucleotides
-                        # if (utils.get_acid(attempted_fix[0][i-2:i+1]) == utils.get_acid(seq[i-2:i+1])):
                         if (attempted_fix[i] == seq[i]): 
                             correct_uncertainties += 1
                         else: 
@@ -86,14 +85,14 @@ class SecondAnalyzer(Analyzer):
                         attempted_fix[i] = random.choice(temp)
                         uncertain_changed += 1
                         
-                        # if (utils.get_acid(attempted_fix[0][i-2:i+1]) == utils.get_acid(seq[i-2:i+1])):
                         if (attempted_fix[i] == seq[i]): 
                             guessed_uncertainties += 1
                         else: 
                             unfixed_errors += 1
 
             potential_deviations[j] = (potential_errors - old_potential_errors) / (total - old_total) * 100
-            potential_repairable_deviations[j] = potential_errors - old_potential_errors - (total_repairable + correct_uncertainties - old_total_repairable - old_correct_uncertainties)
+            # potential_repairable_deviations[j] = potential_errors - old_potential_errors - (total_repairable + correct_uncertainties - old_total_repairable - old_correct_uncertainties)
+            potential_repairable_deviations[j] = potential_errors - old_potential_errors - (total_repairable - old_total_repairable)
             potential_repairable_deviations[j] = potential_repairable_deviations[j] / (total - old_total) * 100
             actual_deviations[j] = (actual_errors - old_actual_errors) / (total - old_total) * 100
             actual_repairable_deviations[j] = (actual_errors - old_actual_errors - (actual_errors_repairable - old_actual_repairable)) / (total - old_total) * 100
@@ -105,7 +104,7 @@ class SecondAnalyzer(Analyzer):
         rep_perc2 = ((total_repairable + correct_uncertainties) / potential_errors) * 100 
         actual_rep_perc2 = ((actual_errors_repairable) / actual_errors) * 100 
         
-        # calculate sample standard deviation as we clearly only have a sample
+        # calculate standard deviation 
         potential_standard_deviation = 0
         potential_standard_deviation_repairable = 0
         actual_standard_deviation = 0
@@ -116,10 +115,10 @@ class SecondAnalyzer(Analyzer):
             actual_standard_deviation += math.pow(actual_deviations[k] - potential_error_perc, 2)
             actual_standard_deviation_repairable += math.pow(actual_repairable_deviations[k] - actual_rep_perc, 2)
 
-        potential_standard_deviation = math.pow(potential_standard_deviation / (self.SAMPLE_SIZE - 1), 1/2)
-        potential_standard_deviation_repairable = math.pow(potential_standard_deviation_repairable / (self.SAMPLE_SIZE - 1), 1/2)
-        actual_standard_deviation = math.pow(actual_standard_deviation / (self.SAMPLE_SIZE - 1), 1/2)
-        actual_standard_deviation_repairable = math.pow(actual_standard_deviation_repairable / (self.SAMPLE_SIZE - 1), 1/2)
+        potential_standard_deviation = math.pow(potential_standard_deviation / self.SAMPLE_SIZE, 1/2)
+        potential_standard_deviation_repairable = math.pow(potential_standard_deviation_repairable / self.SAMPLE_SIZE, 1/2)
+        actual_standard_deviation = math.pow(actual_standard_deviation / self.SAMPLE_SIZE, 1/2)
+        actual_standard_deviation_repairable = math.pow(actual_standard_deviation_repairable / self.SAMPLE_SIZE, 1/2)
 
         unrepairable_uncertain_perc = ((uncertain_unchanged - correct_uncertainties) / actual_errors) * 100 
         
