@@ -101,12 +101,11 @@ class ThirdAnalyzer(Analyzer):
 
             while (((rep_q_score_error_count / reading_count) < self.ERROR_GOAL) and achieve_goal > 0):
                 achieve_goal -= 1
-                rep_q_score_error_count += q_scores_error[achieve_goal - 1] - old_q_scores_error[achieve_goal - 1] - q_scores_repaired[achieve_goal - 1]
+                rep_q_score_error_count += q_scores_error[achieve_goal - 1] - old_q_scores_error[achieve_goal - 1] - (q_scores_repaired[achieve_goal - 1] - old_q_scores_repaired[achieve_goal - 1])
                 # TODO: Fix the geq_30_wrong_perc and add one for repairable and maybe make geq_30_wrong_perc geq_set_wrong_perc which uses a variable
                 if(achieve_goal == 30):
                     geq_30_wrong_perc = q_score_error_count / reading_count 
 
-            
             rep_min_qscores += achieve_goal
 
             no_reps_min_qscore_deviation[j] = no_rep_min_qscores - old_no_rep_min_qscores
