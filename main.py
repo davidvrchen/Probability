@@ -17,53 +17,57 @@ import numpy as np
 # analyzer2 = SecondAnalyzer(SamplerType.ACID_SAMPLING, PerturberType.QUALITY_SCORE_PERTURBING, sample_size = 10000, fail_probability = 0.001, bounds = [25, 30])
 # analyzer2.print_analyze()
 
-# analyzer3 = ThirdAnalyzer(SamplerType.ACID_SAMPLING, PerturberType.DISTRIBUTED_QUALITY_SCORE, sample_size = 10000, goal = 0.001)
-# analyzer3.print_analyze()
+analyzer3 = ThirdAnalyzer(SamplerType.ACID_SAMPLING, PerturberType.DISTRIBUTED_QUALITY_SCORE, sample_size = 10000, goal = 0.001)
+analyzer3.print_analyze()
 
 # Get the error percentages for the total and the repairable errors with theirstandard deviations as pairs 
+start = 0
+end = 41
+x_axis = [j for j in range(start, end)]
 
 # For analyzer 1
 print("analyzer 1 started")
-prob_standard_dev1 = np.zeros((2, 2, 41))
-for i in range(41):
-    analyzer1 = FirstAnalyzer(SamplerType.ACID_SAMPLING, PerturberType.BINARY_PERTURBING, sample_size = 10000, fail_probability = math.pow(10,  -i / 10))
+prob_standard_dev1 = np.zeros((2, 2, end - start))
+for j in range(start, end):
+    analyzer1 = FirstAnalyzer(SamplerType.ACID_SAMPLING, PerturberType.BINARY_PERTURBING, sample_size = 10000, fail_probability = math.pow(10,  -j / 10))
     results_analyzer1 = analyzer1.analyze()
+    i = j - start
     prob_standard_dev1[0][0][i] = results_analyzer1[0]
     prob_standard_dev1[0][1][i] = results_analyzer1[3]
     prob_standard_dev1[1][0][i] = results_analyzer1[1]
     prob_standard_dev1[1][1][i] = results_analyzer1[4]
-    print("analyzer 1 has results up to ", i)
-
-x_axis = [i for i in range(41)]
+    print("analyzer 1 has results up to ", j)
 
 # For analyzer 2 we use the potential error values as the total error values are the same as analyzer 1
 print("analyzer 2 started")
-prob_standard_dev2 = np.zeros((2, 2, 41))
-for i in range(41):
-    analyzer2 = SecondAnalyzer(SamplerType.ACID_SAMPLING, PerturberType.QUALITY_SCORE_PERTURBING, sample_size=10000, fail_probability = math.pow(10,  -i / 10), bounds = [25, 30])
+prob_standard_dev2 = np.zeros((2, 2, end - start))
+for j in range(start, end):
+    analyzer2 = SecondAnalyzer(SamplerType.ACID_SAMPLING, PerturberType.QUALITY_SCORE_PERTURBING, sample_size=10000, fail_probability = math.pow(10,  -j / 10), bounds = [25, 30])
     results_analyzer2 = analyzer2.analyze()
+    i = j - start
     prob_standard_dev2[0][0][i] = results_analyzer2[0]
     prob_standard_dev2[0][1][i] = results_analyzer2[6]
     prob_standard_dev2[1][0][i] = results_analyzer2[2]
     prob_standard_dev2[1][1][i] = results_analyzer2[7]
-    print("analyzer 2 has results up to ", i)
+    print("analyzer 2 has results up to ", j)
 
 print("analyzer 3 started")
-prob_standard_dev3 = np.zeros((2, 2, 41))
-for i in range(41):
-    analyzer3 = ThirdAnalyzer(SamplerType.ACID_SAMPLING, PerturberType.DISTRIBUTED_QUALITY_SCORE, sample_size = 10000, goal = math.pow(10,  -i / 10))
+prob_standard_dev3 = np.zeros((2, 2, end - start))
+for j in range(start, end):
+    analyzer3 = ThirdAnalyzer(SamplerType.ACID_SAMPLING, PerturberType.DISTRIBUTED_QUALITY_SCORE, sample_size = 10000, goal = math.pow(10,  -j / 10))
     results_analyzer3 = analyzer3.analyze()
+    i = j - start
     prob_standard_dev3[0][0][i] = results_analyzer3[5]
     prob_standard_dev3[0][1][i] = results_analyzer3[7]
     prob_standard_dev3[1][0][i] = results_analyzer3[6]
     prob_standard_dev3[1][1][i] = results_analyzer3[8]
-    print("analyzer 3 has results up to ", i)
+    print("analyzer 3 has results up to ", j)
 
 fig, axs = plt.subplots(3, sharex=True)
 
 # plot results analyzer 1 in first plot together with the standard deviation
 # normal error percentage:
-axs[0].plot(x_axis, prob_standard_dev1[1][0], 'red')
+axs[0].plot(x_axis, prob_standard_dev1[0][0], 'red')
 axs[0].plot(x_axis, prob_standard_dev1[0][0] + prob_standard_dev1[0][1], 'blue')
 axs[0].plot(x_axis, prob_standard_dev1[0][0] - prob_standard_dev1[0][1], 'blue')
 # error percentage after repairs:
@@ -112,6 +116,9 @@ axs[2].set(xlabel = "Q score for error")
 # Uncomment to make x axis not shared
 for ax in axs:
     ax.label_outer()
+
+# Uncomment to remove the grid
+plt.grid()
 
 plt.show()
 
