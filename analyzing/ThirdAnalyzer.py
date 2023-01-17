@@ -22,7 +22,8 @@ class ThirdAnalyzer(Analyzer):
         print("Average minimal Q score to ensure error probability with repairsthis score or higher is less than the goal: ", analysis[6])
         print("Standard deviation for the minimal Q score without repairs: ", analysis[7])
         print("Standard deviation for the minimal Q score with repairs: ", analysis[8])
-        # print("Percentage of readings with a Q score above 30 that are incorrect: ", analysis[6])
+        print("Percentage of readings with a Q score above 30 that are incorrect: ", analysis[9])
+        print("Percentage of readings after repairs with a Q score above 30 that are incorrect: ", analysis[10])
         
         print('\n')
 
@@ -42,6 +43,9 @@ class ThirdAnalyzer(Analyzer):
         repairable_deviations = [0 for i in range(self.SAMPLE_SIZE)]
         no_reps_min_qscore_deviation = [0 for i in range(self.SAMPLE_SIZE)]
         rep_min_qscore_deviation = [0 for i in range(self.SAMPLE_SIZE)]
+
+        geq_30_wrong_perc = 0
+        rep_geq_30_wrong_perc = 0
 
         for j in range(self.SAMPLE_SIZE):
             seq = self.sampler.random_sequence()
@@ -77,36 +81,50 @@ class ThirdAnalyzer(Analyzer):
             q_score_error_count = q_scores_error[achieve_goal - 1] - old_q_scores_error[achieve_goal - 1]
             reading_count = q_scores_total[achieve_goal - 1] - old_q_scores_total[achieve_goal - 1]
             rep_q_score_error_count = q_scores_error[achieve_goal - 1] - old_q_scores_error[achieve_goal - 1] - (q_scores_repaired[achieve_goal - 1] - old_q_scores_repaired[achieve_goal - 1])
-
+            
             while (reading_count == 0):
                 achieve_goal -= 1
                 q_score_error_count += q_scores_error[achieve_goal - 1] - old_q_scores_error[achieve_goal - 1] # add the values for the next highest Q score
                 reading_count += q_scores_total[achieve_goal - 1] - old_q_scores_total[achieve_goal - 1]
                 rep_q_score_error_count += q_scores_error[achieve_goal - 1] - old_q_scores_error[achieve_goal - 1] - (q_scores_repaired[achieve_goal - 1] - old_q_scores_repaired[achieve_goal - 1])
-                # TODO: Fix the geq_set_wrong_perc and add one for repairable and maybe make geq_30_wrong_perc geq_set_wrong_perc which uses a variable
                 if(achieve_goal == 30):
-                    geq_30_wrong_perc = q_score_error_count / reading_count   
+                    geq_30_wrong_perc += q_score_error_count / reading_count   
+                    rep_geq_30_wrong_perc += rep_q_score_error_count / reading_count
 
             while (((q_score_error_count / reading_count) < self.ERROR_GOAL) and achieve_goal > 0):
                 achieve_goal -= 1
                 q_score_error_count += q_scores_error[achieve_goal - 1] - old_q_scores_error[achieve_goal - 1] # add the values for the next highest Q score
                 reading_count += q_scores_total[achieve_goal - 1] - old_q_scores_total[achieve_goal - 1]
                 rep_q_score_error_count += q_scores_error[achieve_goal - 1] - old_q_scores_error[achieve_goal - 1] - (q_scores_repaired[achieve_goal - 1] - old_q_scores_repaired[achieve_goal - 1])
-                # TODO: Fix the geq_set_wrong_perc and add one for repairable and maybe make geq_30_wrong_perc geq_set_wrong_perc which uses a variable
                 if(achieve_goal == 30):
-                    geq_30_wrong_perc = q_score_error_count / reading_count                
+                    geq_30_wrong_perc += q_score_error_count / reading_count   
+                    rep_geq_30_wrong_perc += rep_q_score_error_count / reading_count             
             
             # set here and continue with repairable
             no_rep_min_qscores += achieve_goal
 
             while (((rep_q_score_error_count / reading_count) < self.ERROR_GOAL) and achieve_goal > 0):
                 achieve_goal -= 1
+                q_score_error_count += q_scores_error[achieve_goal - 1] - old_q_scores_error[achieve_goal - 1] # add the values for the next highest Q score
+                reading_count += q_scores_total[achieve_goal - 1] - old_q_scores_total[achieve_goal - 1]
                 rep_q_score_error_count += q_scores_error[achieve_goal - 1] - old_q_scores_error[achieve_goal - 1] - (q_scores_repaired[achieve_goal - 1] - old_q_scores_repaired[achieve_goal - 1])
-                # TODO: Fix the geq_30_wrong_perc and add one for repairable and maybe make geq_30_wrong_perc geq_set_wrong_perc which uses a variable
                 if(achieve_goal == 30):
-                    geq_30_wrong_perc = q_score_error_count / reading_count 
-
+                    geq_30_wrong_perc += q_score_error_count / reading_count 
+                    rep_geq_30_wrong_perc += rep_q_score_error_count / reading_count
+            
             rep_min_qscores += achieve_goal
+            
+            # ensure geq_30_wrong_perc gets the right value
+            while (achieve_goal >= 30):
+                achieve_goal -= 1
+                q_score_error_count += q_scores_error[achieve_goal - 1] - old_q_scores_error[achieve_goal - 1] # add the values for the next highest Q score
+                reading_count += q_scores_total[achieve_goal - 1] - old_q_scores_total[achieve_goal - 1]
+                rep_q_score_error_count += q_scores_error[achieve_goal - 1] - old_q_scores_error[achieve_goal - 1] - (q_scores_repaired[achieve_goal - 1] - old_q_scores_repaired[achieve_goal - 1])
+                if(achieve_goal == 30):
+                    geq_30_wrong_perc += q_score_error_count / reading_count 
+                    rep_geq_30_wrong_perc += rep_q_score_error_count / reading_count
+
+            
 
             no_reps_min_qscore_deviation[j] = no_rep_min_qscores - old_no_rep_min_qscores
             rep_min_qscore_deviation[j] = rep_min_qscores - old_rep_min_qscores
@@ -136,8 +154,7 @@ class ThirdAnalyzer(Analyzer):
         std_dev_no_rep_qscores = math.pow(std_dev_no_rep_qscores / self.SAMPLE_SIZE, 1/ 2)
         std_dev_rep_qscores = math.pow(std_dev_rep_qscores / self.SAMPLE_SIZE, 1 / 2)
 
-        # round avg_qscore_errors up to the nearest integer 
-        # no_rep_avg_qscore_error = math.ceil(no_rep_avg_qscore_error)
-        # rep_avg_qscore_error = math.ceil(rep_avg_qscore_error)
+        geq_30_wrong_perc = geq_30_wrong_perc / self.SAMPLE_SIZE
+        rep_geq_30_wrong_perc = rep_geq_30_wrong_perc / self.SAMPLE_SIZE
 
-        return [error_perc, rep_perc, rep_perc2, standard_deviation, standard_deviation_repairable, no_rep_avg_qscore_error, rep_avg_qscore_error, std_dev_no_rep_qscores, std_dev_rep_qscores]
+        return [error_perc, rep_perc, rep_perc2, standard_deviation, standard_deviation_repairable, no_rep_avg_qscore_error, rep_avg_qscore_error, std_dev_no_rep_qscores, std_dev_rep_qscores, geq_30_wrong_perc, rep_geq_30_wrong_perc]
