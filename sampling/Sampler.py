@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 
 class Sampler(ABC):
 
-    sequence_length = 252
+    sequence_length = 300
 
     def __init__(self):
         super().__init__()
