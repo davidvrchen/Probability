@@ -22,8 +22,6 @@ analyzer2.print_analyze()
 
 analyzer3 = ThirdAnalyzer(SamplerType.ACID_SAMPLING, PerturberType.DISTRIBUTED_QUALITY_SCORE, sample_size = sampleSize, goal = failProb)
 analyzer3.print_analyze()
-analyzer3.print_analyze()
-analyzer3.print_analyze()
 
 mplt.rcParams.update({'font.size': 10})
 
